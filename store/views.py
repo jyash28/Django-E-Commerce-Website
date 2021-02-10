@@ -18,5 +18,9 @@ def index(request):
     return render(request,'index.html',data)
 
 def signup(request):
-    return render(request,'signup.html')
+
+    if request.method == 'GET':
+        return render(request,'signup.html')
+    else:
+        return HttpResponse(request.POST.get('email'))
 
