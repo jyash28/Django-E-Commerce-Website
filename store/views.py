@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render,redirect
 from django.http import HttpResponse
 from .models.product import Product
 from .models.category import Category
@@ -66,7 +66,7 @@ def signup(request):
                             email=email,
                             password=password)
             customer.register()
-            return render(request,'index.html')
+            return redirect('homepage')
         else:
             data={
                 'error':error_message,
