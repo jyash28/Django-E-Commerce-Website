@@ -31,6 +31,13 @@ def signup(request):
         password=postData.get('password')
 
         # validation
+        value={
+            'first_name':first_name,
+            'last_name':last_name,
+            'email':email,
+            'phone':phone
+        }
+
         error_message=None
 
         if(not first_name):
@@ -59,6 +66,11 @@ def signup(request):
                             email=email,
                             password=password)
             customer.register()
+            return render(request,'index.html')
         else:
-            return render(request,'signup.html',{'error':error_message})
+            data={
+                'error':error_message,
+                'values':value
+            }
+            return render(request,'signup.html',data)
 
