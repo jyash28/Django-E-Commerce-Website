@@ -21,11 +21,31 @@ def index(request):
     data['categories']= categories
     return render(request,'index.html',data)
 
-def signup(request):
+def validateCustomer(customer):
+    error_message=None;
 
-    if request.method == 'GET':
-        return render(request,'signup.html')
-    else:
+    if(not customer.first_name):
+        error_message="First Name Required"
+    elif len(customer.first_name)<4 :
+        error_message= "First name should be minimum 4 character "
+    elif  not customer.last_name:
+        error_message="Lastname Required!!"
+    elif len(customer.last_name)<4:
+        error_message="Last name should be minimum 4 character "
+    elif not customer.phone:
+        error_message='Phone Number Required!!'
+    elif len(customer.phone)<10:
+        error_message="Phone number must be minimum 10 digit"
+    elif len(customer.password)<8:
+        error_message="password must be minimum 8 character"
+    elif len(customer.email)<6:
+        error_message="email must be minimum 6 character"
+    elif customer.isExists():
+        error_message='Email Address Already Registered'
+    return error_message
+
+def registerUser(request):
+      
         postData=request.POST
         first_name=postData.get('firstname')
         last_name=postData.get('lastname')
@@ -49,24 +69,7 @@ def signup(request):
                             email=email,
                             password=password)
 
-        if(not first_name):
-            error_message="First Name Required"
-        elif len(first_name)<4 :
-            error_message= "First name should be minimum 4 character "
-        elif  not last_name:
-            error_message="Lastname Required!!"
-        elif len(last_name)<4:
-            error_message="Last name should be minimum 4 character "
-        elif not phone:
-            error_message='Phone Number Required!!'
-        elif len(phone)<10:
-            error_message="Phone number must be minimum 10 digit"
-        elif len(password)<8:
-            error_message="password must be minimum 8 character"
-        elif len(email)<6:
-            error_message="email must be minimum 6 character"
-        elif customer.isExists():
-            error_message='Email Address Already Registered'
+        error_message=validateCustomer(customer)
         # saving
         if not error_message:
             print(first_name,last_name,phone,email,password)
@@ -80,3 +83,10 @@ def signup(request):
             }
             return render(request,'signup.html',data)
 
+
+
+def signup(request):
+    if request.method == 'GET':
+        return render(request,'signup.html')
+    else:
+        return registerUser(request)
