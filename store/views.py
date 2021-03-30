@@ -8,10 +8,10 @@ from .models.customer import Customer
 
 
 # Create your views here.
-def index(request):
+def index(request):                             
     products = None
     categories =Category.get_all_categories()
-    categoryID= request.GET.get('category')    
+    categoryID= request.GET.get('category')               
     if categoryID:
         products=Product.get_all_products_by_categoryid(categoryID)
     else:
